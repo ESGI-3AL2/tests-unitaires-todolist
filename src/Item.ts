@@ -8,13 +8,13 @@ export default class Item {
       this.creationDate = date ; 
   }
 
+
   getDate () : Date {
     return this.creationDate ; 
   }
 
   getItemName () : string {
-    return this.name ;
-    
+    return this.name ;  
   }
 
   setItemName (itemName : string) : void {
@@ -24,7 +24,7 @@ export default class Item {
   setItemDate (date : Date) : void {
     this.creationDate = date ; 
   }
-
+  // checking the name max size 
   checkItemName () : Error | boolean {
 
     if (this.name.length > 1000 ) {

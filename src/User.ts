@@ -1,13 +1,24 @@
 import moment, { Moment } from 'moment';
+import ItemList from './ItemsList';
 
 class User {
+	private _todos: ItemList;
+
 	constructor(
 		private email: string,
 		private firstName: string,
 		private lastName: string,
 		private dateOfBirth: Moment,
 		private password: string,
-	) {}
+	) {
+		if (!this.isValid()) throw new Error("invalid user");
+
+		this._todos = new ItemList();
+	}
+
+	get todos(): ItemList {
+		return this._todos;
+	}
 
 	isValid() {
 		const areUserSettingsSet = Boolean(this.firstName && this.lastName && this.email && this.password);

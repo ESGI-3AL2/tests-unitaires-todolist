@@ -1,12 +1,13 @@
 {
-  "devDependencies": {
-    "prettier": "^2.8.2",
-    "ts-jest": "^29.0.4"
-  },
   "scripts": {
     "test": "jest"
   },
   "dependencies": {
     "moment": "^2.29.4"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.2",
+    "ts-jest": "^29.0.4",
+    "ts-node": "^10.9.1"
   }
 }

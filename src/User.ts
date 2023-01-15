@@ -26,7 +26,7 @@ export default class User {
 	}
 
 	isValid() {
-		const areUserSettingsSet = Boolean(this.firstName && this.lastName && this.email && this.password);
+		const areUserSettingsSet = Boolean(this.email && this.firstName && this.lastName && this.dateOfBirth && this.password);
 
 		const isUserEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email);
 

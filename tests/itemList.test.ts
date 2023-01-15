@@ -1,85 +1,84 @@
-import moment, { Moment } from 'moment';
-import User from '../src/User';
+import moment from 'moment';
 
-import { describe, expect, test, beforeEach, jest } from '@jest/globals';
+import { expect, test, jest, describe } from '@jest/globals';
 import Item from '../src/Item';
 import ItemList from '../src/ItemsList';
-import { check } from 'prettier';
 
+describe('items list', () => {
+	test(`add 1 item should make the itemlist's size to 1`, () => {
+		let itemlist: ItemList = new ItemList();
 
-
-    test(`functional add case`, () => {
-        let itemlist : ItemList = new ItemList() ;
-        expect(itemlist.addItem(new Item("coucou" , "other something" , moment().add(25, "hours")))).toBeTruthy();
-    });
-
-    test(`testing items list size return`, () => {
-      let itemlist : ItemList = new ItemList() ;
-
-        itemlist.addItem(new Item('some todo', 'something', moment())) ; 
-        itemlist.addItem(new Item('coucou', 'other something', moment().add(1, 'hour'))) ; 
-        itemlist.addItem(new Item('hello world', 'other something', moment().add(2, 'hour'))) ; 
-
-        expect(itemlist.checkListSize()).toEqual(3) ;
+		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeTruthy();
+		expect(itemlist.checkListSize()).toEqual(1);
 	});
 
-    test(`checking interval time adding`, () => {
-      let itemlist : ItemList = new ItemList() ;
+	test(`add 3 items in the items list size should equal to 3`, () => {
+		let itemlist: ItemList = new ItemList();
 
-        itemlist.addItem(new Item('some todo', 'something', moment())) ; 
-       let checkingInterval : any = itemlist.checkAddInterval(new Item('coucou', 'other something', moment().add(25, "minute"))) ; 
+		itemlist.addItem(new Item('some todo', 'something', moment()));
+		itemlist.addItem(new Item('coucou', 'other something', moment().add(1, 'hour')));
+		itemlist.addItem(new Item('hello world', 'other something', moment().add(2, 'hour')));
 
-        expect(checkingInterval).toEqual(false) ;
+		expect(itemlist.checkListSize()).toEqual(3);
 	});
 
-    test(`checking passing interval time +30 minuts`, () => {
-        let itemlist : ItemList = new ItemList() ;
-  
-          itemlist.addItem(new Item('some todo', 'something', moment())) ; 
-         let checkingInterval : any = itemlist.checkAddInterval(new Item('coucou', 'other something', moment().add(31, "minute"))) ; 
-  
-          expect(checkingInterval).toEqual(true) ; 
-      });
+	test(`checkAddInterval method should return false when adding a 2nd item before 30 min 1 ms`, () => {
+		let itemlist: ItemList = new ItemList();
 
-      test(`checking failed adding with max array size error`, () => {
-        let itemlist : ItemList = new ItemList() ; 
-        for (let i = 1 ; i < 11 ; i++ ) {
-            itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, "hours"))) ;
-        }
-        expect(itemlist.addItem(new Item("toto" , "tata" , moment().add(25, "hours")))).toStrictEqual(RangeError("max size : can't add new item due to max size"))
-      });
+		itemlist.addItem(new Item('some todo', 'something', moment()));
+		let checkingInterval: boolean = itemlist.checkAddInterval(
+			new Item('coucou', 'other something', moment().add(25, 'minute')),
+		);
 
-      test(`checking adding with sufficient array size`, () => {
-        let itemlist : ItemList = new ItemList() ;
-         
-        for (let i = 1 ; i < 5 ; i++ ) {
-            itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, "hours"))) ;
-        }
+		expect(checkingInterval).toEqual(false);
+	});
 
-        expect(itemlist.addItem(new Item("toto" , "tata" , moment().add(25, "hours")))).toBeTruthy() ;
-      });
+	test(`checkAddInterval method should return false when adding a 2nd item after 30 min`, () => {
+		let itemlist: ItemList = new ItemList();
 
-      test(`checking adding with an existing name in the array`, () => {
-        let itemlist : ItemList = new ItemList() ;
-        itemlist.addItem(new Item('coucou' , 'other something', moment().add(1, "hours"))) ;
-        
+		itemlist.addItem(new Item('some todo', 'something', moment()));
+		let checkingInterval: boolean = itemlist.checkAddInterval(
+			new Item('coucou', 'other something', moment().add(31, 'minute')),
+		);
 
-        expect(itemlist.addItem(new Item("coucou" , "other something" , moment().add(25, "hours")))).toBeFalsy() ;
-      });
+		expect(checkingInterval).toEqual(true);
+	});
 
-      test(`checking adding with an existing name in the array`, () => {
-        let itemlist : ItemList = new ItemList() ;
-        for (let i = 1 ; i < 8 ; i++ ) {
-            itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, "hours"))) ;
-        }
-        itemlist.emailService.notify = jest.fn().mockReturnValue(true) ;
-        expect(itemlist.addItem(new Item("coucou" , "other something" , moment().add(25, "hours")))).toBeTruthy();
-      });
+	test('add test with time interval check', () => {
+		let itemlist: ItemList = new ItemList();
+		itemlist.addItem(new Item('coucou', 'other something', moment()));
+		const checkTimeAdd: any = itemlist.addItem(new Item('toto', 'other something', moment().add(12, 'minutes')));
 
+		expect(checkTimeAdd).toStrictEqual(RangeError("can't add item 30 min are required between tow adds"));
+	});
 
+	test(`when adding more than 10 items, the itemlist'size should be 10 & it should throws an error`, () => {
+		let itemlist: ItemList = new ItemList();
+		for (let i = 1; i < 11; i++) {
+			itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, 'hours')));
+		}
 
+		expect(itemlist.addItem(new Item('toto', 'tata', moment().add(25, 'hours')))).toStrictEqual(
+			RangeError("max size : can't add new item due to max size"),
+		);
+		expect(itemlist.checkListSize()).toEqual(10);
+	});
 
+	test(`when adding an item whose name already exist in the itemlist, addItem method should return false`, () => {
+		let itemlist: ItemList = new ItemList();
+		itemlist.addItem(new Item('coucou', 'other something', moment().add(1, 'hours')));
 
+		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeFalsy();
+	});
 
+	test(`when adding an 8th item, it should send an email notification`, () => {
+		let itemlist: ItemList = new ItemList();
+		for (let i = 1; i <= 7; i++) {
+			itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, 'hours')));
+		}
+		itemlist.emailService.notify = jest.fn().mockReturnValue(true);
 
-
+		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeTruthy();
+		expect(itemlist.emailService.notify).toBeCalled();
+	});
+});

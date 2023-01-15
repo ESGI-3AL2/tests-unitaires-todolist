@@ -4,11 +4,16 @@ import moment from 'moment';
 
 export default class ItemList {
 	private listArray: Item[];
-	public emailService: EmailSenderService;
+	private emailService: EmailSenderService;
 
 	constructor() {
 		this.listArray = new Array<Item>();
 		this.emailService = new EmailSenderService();
+	}
+
+
+	get emailSenderService () : EmailSenderService {
+		return this.emailService ;
 	}
 
 	addItem(item: Item): boolean | Error {

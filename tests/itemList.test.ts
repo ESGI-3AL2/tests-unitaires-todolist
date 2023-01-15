@@ -18,7 +18,6 @@ describe('items list', () => {
 		itemlist.addItem(new Item('some todo', 'something', moment()));
 		itemlist.addItem(new Item('coucou', 'other something', moment().add(1, 'hour')));
 		itemlist.addItem(new Item('hello world', 'other something', moment().add(2, 'hour')));
-
 		expect(itemlist.checkListSize()).toEqual(3);
 	});
 
@@ -76,9 +75,9 @@ describe('items list', () => {
 		for (let i = 1; i <= 7; i++) {
 			itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, 'hours')));
 		}
-		itemlist.emailService.notify = jest.fn().mockReturnValue(true);
+        itemlist.emailSenderService.notify = jest.fn().mockReturnValue(true) ;
 
 		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeTruthy();
-		expect(itemlist.emailService.notify).toBeCalled();
+		expect(itemlist.emailSenderService.notify).toBeCalled();
 	});
 });

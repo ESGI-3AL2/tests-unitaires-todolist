@@ -126,4 +126,25 @@ describe('user', () => {
 		expect(isTodoAdded).toBeFalsy();
 		expect(todos.checkListSize()).toEqual(1);
 	});
+
+	test('given a 13 years old user adding 11 items, the todolist should have 10 items max and an error is thrown', () => {
+		const user = new User('toto@email.fr', 'prenom', 'nom', minDateOfBirth, '12345678aZ');
+		const todos = user.todos;
+		const addTodo = (i: number) => {
+			user.addTodo(new Item(`some todo ${i}`, 'other something', moment().add(i, 'hour')));
+		};
+
+		let isTodoAdded;
+
+		try {
+			for (let i = 1; i <= 11; i++) {
+				isTodoAdded = addTodo(i);
+			}
+		} catch (err) {
+			expect(addTodo).toThrow("max size : can't add new item due to max size");
+			expect(isTodoAdded).toBeFalsy()
+			expect((err as Error).message).toEqual("max size : can't add new item due to max size");
+			expect(todos.checkListSize()).toEqual(10);
+		}
+	});
 });

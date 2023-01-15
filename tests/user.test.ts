@@ -121,7 +121,7 @@ describe('user', () => {
 		const todos = user.todos;
 
 		let isTodoAdded = user.addTodo(new Item('some todo', 'something', moment()));
-		isTodoAdded = user.addTodo(new Item('some todo', 'other something', moment()));
+		isTodoAdded = user.addTodo(new Item('some todo', 'other something', moment().add(1, "hour")));
 
 		expect(isTodoAdded).toBeFalsy();
 		expect(todos.checkListSize()).toEqual(1);

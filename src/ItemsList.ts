@@ -19,12 +19,10 @@ export default class ItemList {
 			throw new Error("can't add item 30 min are required between tow adds");
 		}
 
-        this.listArray.map((element : Item) => {
-            if (element.getItemName() === item.getItemName()) {
-                throw new Error("todo name must be unique") ;
-            }
-        }) ; 
-
+       for (let i = 0 ; i < this.listArray.length ; i++) 
+       {
+        if (this.listArray[i].getItemName() === item.getItemName()) return false;
+       }
 		this.listArray = [...this.listArray, item];
 
 		if (this.checkListSize() === 8) {
@@ -41,7 +39,10 @@ export default class ItemList {
 	checkAddInterval(): boolean { 
         const lastElemet = this.listArray[this.listArray.length - 1 ] ;   
         if (lastElemet !== undefined) {
-            if (moment().diff(moment(lastElemet.getDate()) , "minutes") < 30) {
+           console.log(lastElemet.getDate()) ;
+           
+            if (moment(lastElemet.getDate()).diff(moment() , "minute") > 30) {
+                console.log("hello") ;
                 return false;
             }
         }

@@ -3,51 +3,46 @@ import ItemList from './ItemsList';
 import Item from './Item';
 
 export default class User {
-	private _todos: ItemList;
+    private _todos: ItemList;
 
-	constructor(
-		private email: string,
-		private firstName: string,
-		private lastName: string,
-		private dateOfBirth: Moment,
-		private password: string,
-	) {
+    constructor(
+        private email: string,
+        private firstName: string,
+        private lastName: string,
+        private dateOfBirth: Moment,
+        private password: string,
+    ) {
+        this._todos = new ItemList();
+    }
 
-		if (!this.isValid()) throw new Error("invalid user");
+    get todos(): ItemList {
+        return this._todos;
+    }
 
+    addTodo(item: Item): Error | boolean {
+        if (!this.isValid()) return false;
 
-		this._todos = new ItemList();
-	}
+        return this._todos.addItem(item);
+    }
 
-	get todos(): ItemList {
-		return this._todos;
-	}
+    isValid() {
+        const areUserSettingsSet = Boolean(
+            this.email && this.firstName && this.lastName && this.dateOfBirth && this.password,
+        );
 
-	addTodo(item: Item): Error | boolean {
-		if (!this.isValid()) return false;
+        const isUserEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email);
 
-		return this._todos.addItem(item);
-	}
+        const isPasswordLengthBetween8And40: boolean = this.password.length >= 8 && this.password.length <= 40;
+        const hasPasswordAtLeast1Lowercase: boolean = /[a-z]+/.test(this.password);
+        const hasPasswordAtLeast1Uppercase: boolean = /[A-Z]+/.test(this.password);
+        const hasPasswordAtLeast1Digit: boolean = /\d+/.test(this.password);
+        const isPasswordValid =
+            isPasswordLengthBetween8And40 &&
+            hasPasswordAtLeast1Lowercase &&
+            hasPasswordAtLeast1Uppercase &&
+            hasPasswordAtLeast1Digit;
 
-	isValid() {
-		const areUserSettingsSet = Boolean(
-			this.email && this.firstName && this.lastName && this.dateOfBirth && this.password,
-		);
-
-		const isUserEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email);
-
-		const isPasswordLengthBetween8And40: boolean = this.password.length >= 8 && this.password.length <= 40;
-		const hasPasswordAtLeast1Lowercase: boolean = /[a-z]+/.test(this.password);
-		const hasPasswordAtLeast1Uppercase: boolean = /[A-Z]+/.test(this.password);
-		const hasPasswordAtLeast1Digit: boolean = /\d+/.test(this.password);
-		const isPasswordValid =
-			isPasswordLengthBetween8And40 &&
-			hasPasswordAtLeast1Lowercase &&
-			hasPasswordAtLeast1Uppercase &&
-			hasPasswordAtLeast1Digit;
-
-		const isUser13YearsOldAtLeast = moment().diff(moment(this.dateOfBirth), 'years') >= 13;
-
-		return areUserSettingsSet && isUserEmailValid && isPasswordValid && isUser13YearsOldAtLeast;
-	}
+        const isUser13YearsOldAtLeast = moment().diff(moment(this.dateOfBirth), 'years') >= 13;
+        return areUserSettingsSet && isUserEmailValid && isPasswordValid && isUser13YearsOldAtLeast;
+    }
 }

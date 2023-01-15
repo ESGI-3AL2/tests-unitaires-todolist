@@ -12,6 +12,10 @@ export default class User {
 		private dateOfBirth: Moment,
 		private password: string,
 	) {
+
+		if (!this.isValid()) throw new Error("invalid user");
+
+
 		this._todos = new ItemList();
 	}
 

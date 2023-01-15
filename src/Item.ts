@@ -27,7 +27,9 @@ export default class Item {
 		return this.content;
 	}
 
-	setContent(value: string) {
+	setContent(value: string): void {
+		this.checkContent(value);
+
 		this.content = value;
 	}
 

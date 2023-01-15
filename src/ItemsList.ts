@@ -4,7 +4,7 @@ import moment from 'moment';
 
 export default class ItemList {
 	private listArray: Item[];
-	private emailService: EmailSenderService;
+	public emailService: EmailSenderService;
 
 	constructor() {
 		this.listArray = new Array<Item>();
@@ -13,7 +13,7 @@ export default class ItemList {
 
 	addItem(item: Item): boolean | Error {
 		if (this.checkListSize() >= 10) {
-			throw new Error("max size : can't add new item due to max size");
+			return new RangeError("max size : can't add new item due to max size");
 		}
 		if (!this.checkAddInterval(item)) {
 			throw new Error("can't add item 30 min are required between tow adds");

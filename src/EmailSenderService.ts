@@ -1,5 +1,5 @@
 export default class EmailSenderService {
-	notify(): boolean {
-		return true;
+	notify(): void {
+	
 	}
 }

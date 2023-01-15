@@ -1,9 +1,7 @@
-import moment, { Moment } from 'moment';
-import User from '../src/User';
+import moment from 'moment';
 
 import { describe, expect, test, beforeEach, jest } from '@jest/globals';
 import Item from '../src/Item';
-import ItemList from '../src/ItemsList';
 
 describe('item', () => {
 	let item: Item;

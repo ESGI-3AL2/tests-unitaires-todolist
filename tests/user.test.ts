@@ -15,11 +15,11 @@ describe('user', () => {
 
 	test('todos getter should return an instance of ItemList', () => {
 		const user = new User('toto@email.fr', 'prenom', 'nom', minDateOfBirth, '12345678aZ');
-		const getTodos = jest.spyOn(user, 'todos', 'get');
+		const getTodosSpy = jest.spyOn(user, 'todos', 'get');
 
 		const todos = user.todos;
 
-		expect(getTodos).toReturnWith(todos);
+		expect(getTodosSpy).toReturnWith(todos);
 		expect(todos).toBeInstanceOf(ItemList);
 	});
 
@@ -91,13 +91,13 @@ describe('user', () => {
 		const user = new User('toto@email.fr', 'prenom', 'nom', twoYearsOldDateOfBirth, '12345678aZ');
 		const { todos } = user;
 		const item = new Item('some todo', 'something', moment());
-		const isUserValid = jest.spyOn(user, 'isValid');
+		const isUserValidSpy = jest.spyOn(user, 'isValid');
 		const todosAddItemSpy = jest.spyOn(todos, 'addItem');
 
 		const isTodoAdded = user.addTodo(item);
 
-		expect(isUserValid).toBeCalled();
-		expect(isUserValid).toReturnWith(false);
+		expect(isUserValidSpy).toBeCalled();
+		expect(isUserValidSpy).toReturnWith(false);
 		expect(todosAddItemSpy).not.toBeCalled();
 		expect(isTodoAdded).toBeFalsy();
 	});
@@ -105,13 +105,13 @@ describe('user', () => {
 		const user = new User('toto@email.fr', 'prenom', 'nom', minDateOfBirth, '12345678aZ');
 		const { todos } = user;
 		const item = new Item('some todo', 'something', moment());
-		const isUserValid = jest.spyOn(user, 'isValid');
+		const isUserValidSpy = jest.spyOn(user, 'isValid');
 		const todosAddItemSpy = jest.spyOn(todos, 'addItem');
 
 		const isTodoAdded = user.addTodo(item);
 
-		expect(isUserValid).toBeCalled();
-		expect(isUserValid).toReturnWith(true);
+		expect(isUserValidSpy).toBeCalled();
+		expect(isUserValidSpy).toReturnWith(true);
 		expect(todosAddItemSpy).toBeCalledWith(item);
 		expect(isTodoAdded).toBeTruthy();
 		expect(todos.checkListSize()).toEqual(1);
@@ -121,7 +121,7 @@ describe('user', () => {
 		const todos = user.todos;
 
 		let isTodoAdded = user.addTodo(new Item('some todo', 'something', moment()));
-		isTodoAdded = user.addTodo(new Item('some todo', 'other something', moment().add(1, "hour")));
+		isTodoAdded = user.addTodo(new Item('some todo', 'other something', moment().add(1, 'hour')));
 
 		expect(isTodoAdded).toBeFalsy();
 		expect(todos.checkListSize()).toEqual(1);

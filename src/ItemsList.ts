@@ -5,24 +5,27 @@ import moment from 'moment';
 export default class ItemList {
    
     private listArray : Item[] ; 
-    private emailService : EmailSenderService ; 
+    private emailService : EmailSenderService  ; 
+
     constructor () {
-        this.listArray  = new Array<Item>(10) ; 
+        this.listArray  = new Array<Item>() ; 
+        this.emailService = new EmailSenderService() ; 
     }
 
     // adding a new item to the items array 
     addItem (item : Item) : boolean | Error {
         // checking the max size 
         if (this.checkListSize() === 10) {
-            return new Error ("max size : can't add new item due to max size") ; 
+            throw new Error ("max size : can't add new item due to max size") ; 
         }
-        // checking the time interval 
+        //checking the time interval 
         if (!this.checkAddInterval()) {
-            return new Error("can't add item 30 min are required between tow adds") ; 
+            throw new Error("can't add item 30 min are required between tow adds") ; 
         }
         // sending an email in case of 8th element in the list 
         if (this.checkEightItem()) {
             this.emailService.eightItemNotificationEmail() ; 
+            console.log("email sent with success") ;
         }
 
         // adding the item to the list 
@@ -38,14 +41,17 @@ export default class ItemList {
 
     // eight item 
     checkEightItem () : boolean {
-        return this.checkListSize() === 8 ; 
+        return this.checkListSize() === 7 ; 
     }
 
     // time interval 
     checkAddInterval () : boolean {
-        const currentSize : number = this.checkListSize() ; 
-        const lastItem : Item = this.listArray[currentSize] ; 
-        return moment().diff(lastItem.getDate()) < 30 ; 
+        if (this.listArray.length > 0) {
+        const lastElement : Item = this.listArray[Number(this.listArray.length)] ; 
+       // console.log(lastElement) ;
+        }
+        return true ;
+        //return moment().diff(moment(lastItem.getDate())) < 30 ; 
     }
 
 

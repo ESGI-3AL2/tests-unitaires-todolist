@@ -1,10 +1,9 @@
 import moment, { Moment } from 'moment';
-import Item from './Item';
-import EmailSenderService from './EmailSenderService';
+import ItemList from "./ItemsList";
+import Item from "./Item";
 
 export default class User {
-	private readonly emailService: EmailSenderService;
-	private todos: Item[];
+	private _todos: ItemList;
 
 	constructor(
 		private email: string,
@@ -13,19 +12,17 @@ export default class User {
 		private dateOfBirth: Moment,
 		private password: string,
 	) {
-		this.todos = [];
-		this.emailService = new EmailSenderService();
+		if (!this.isValid()) throw new Error("invalid user");
+
+		this._todos = new ItemList();
+	}
+
+	get todos(): ItemList {
+		return this._todos;
 	}
 
 	addTodo(item: Item): void {
-		if (!this.isValid()) return;
-		if (this.todos.length >= 10) return;
-
-		this.todos = [...this.todos, item];
-
-		if (this.todos.length == 8) {
-			this.emailService.eightItemNotificationEmail();
-		}
+		this._todos.addItem(item);
 	}
 
 	isValid() {

@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment';
-import ItemList from "./ItemsList";
-import Item from "./Item";
+import ItemList from './ItemsList';
+import Item from './Item';
 
 export default class User {
 	private _todos: ItemList;
@@ -12,8 +12,6 @@ export default class User {
 		private dateOfBirth: Moment,
 		private password: string,
 	) {
-		if (!this.isValid()) throw new Error("invalid user");
-
 		this._todos = new ItemList();
 	}
 
@@ -21,12 +19,16 @@ export default class User {
 		return this._todos;
 	}
 
-	addTodo(item: Item): void {
-		this._todos.addItem(item);
+	addTodo(item: Item): Error | boolean {
+		if (!this.isValid()) return false;
+
+		return this._todos.addItem(item);
 	}
 
 	isValid() {
-		const areUserSettingsSet = Boolean(this.email && this.firstName && this.lastName && this.dateOfBirth && this.password);
+		const areUserSettingsSet = Boolean(
+			this.email && this.firstName && this.lastName && this.dateOfBirth && this.password,
+		);
 
 		const isUserEmailValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email);
 

@@ -3,7 +3,7 @@ import Item from './Item';
 import EmailSenderService from './EmailSenderService';
 
 export default class User {
-	private emailService?: EmailSenderService;
+	private readonly emailService: EmailSenderService;
 	private todos: Item[];
 
 	constructor(
@@ -24,7 +24,7 @@ export default class User {
 		this.todos = [...this.todos, item];
 
 		if (this.todos.length == 8) {
-			this.emailService?.eightItemNotificationEmail();
+			this.emailService.eightItemNotificationEmail();
 		}
 	}
 

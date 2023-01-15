@@ -15,7 +15,7 @@ export default class ItemList {
 		if (this.checkListSize() >= 10) {
 			throw new Error("max size : can't add new item due to max size");
 		}
-		if (!this.checkAddInterval()) {
+		if (!this.checkAddInterval(item)) {
 			throw new Error("can't add item 30 min are required between tow adds");
 		}
 
@@ -36,13 +36,12 @@ export default class ItemList {
 		return this.listArray.length;
 	}
 
-	checkAddInterval(): boolean { 
+	checkAddInterval(item : Item): boolean { 
         const lastElemet = this.listArray[this.listArray.length - 1 ] ;   
         if (lastElemet !== undefined) {
            console.log(lastElemet.getDate()) ;
            
-            if (moment(lastElemet.getDate()).diff(moment() , "minute") > 30) {
-                console.log("hello") ;
+            if (moment(item.getDate()).diff(moment(lastElemet.getDate()) , "millisecond") <= 1800000) {
                 return false;
             }
         }

@@ -37,7 +37,7 @@ export default class Item {
 
   checkContent(content: string) : void | Error {
     if (content.length > 1000) {
-      throw Error ("max lenght exceeded");
+      throw new Error ("max length exceeded");
     }
   }
 

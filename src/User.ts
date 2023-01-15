@@ -1,8 +1,9 @@
 import moment, { Moment } from 'moment';
 import ItemList from './ItemsList';
+import Item from './Item';
 
-class User {
-	private _todos: ItemList;
+export default class User {
+	private todos: Item[];
 
 	constructor(
 		private email: string,
@@ -11,13 +12,14 @@ class User {
 		private dateOfBirth: Moment,
 		private password: string,
 	) {
-		if (!this.isValid()) throw new Error("invalid user");
-
-		this._todos = new ItemList();
+		this.todos = [];
 	}
 
-	get todos(): ItemList {
-		return this._todos;
+	addTodo(item: Item): void {
+		if (!this.isValid()) return;
+		if (this.todos.length >= 10) return;
+
+		this.todos = [...this.todos, item];
 	}
 
 	isValid() {

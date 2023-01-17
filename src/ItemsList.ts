@@ -11,11 +11,6 @@ export default class ItemList {
 		this.emailService = new EmailSenderService();
 	}
 
-
-	get emailSenderService () : EmailSenderService {
-		return this.emailService ;
-	}
-
 	addItem(item: Item): boolean | Error {
 		if (this.checkListSize() >= 10) {
 			return new RangeError("max size : can't add new item due to max size");

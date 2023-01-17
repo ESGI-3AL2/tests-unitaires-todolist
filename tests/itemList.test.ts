@@ -3,6 +3,7 @@ import moment from 'moment';
 import { expect, test, jest, describe } from '@jest/globals';
 import Item from '../src/Item';
 import ItemList from '../src/ItemsList';
+import EmailSenderService from '../src/EmailSenderService';
 
 describe('items list', () => {
 	test(`add 1 item should make the itemlist's size to 1`, () => {
@@ -18,6 +19,7 @@ describe('items list', () => {
 		itemlist.addItem(new Item('some todo', 'something', moment()));
 		itemlist.addItem(new Item('coucou', 'other something', moment().add(1, 'hour')));
 		itemlist.addItem(new Item('hello world', 'other something', moment().add(2, 'hour')));
+
 		expect(itemlist.checkListSize()).toEqual(3);
 	});
 
@@ -53,6 +55,7 @@ describe('items list', () => {
 
 	test(`when adding more than 10 items, the itemlist'size should be 10 & it should throws an error`, () => {
 		let itemlist: ItemList = new ItemList();
+
 		for (let i = 1; i < 11; i++) {
 			itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, 'hours')));
 		}
@@ -65,6 +68,7 @@ describe('items list', () => {
 
 	test(`when adding an item whose name already exist in the itemlist, addItem method should return false`, () => {
 		let itemlist: ItemList = new ItemList();
+
 		itemlist.addItem(new Item('coucou', 'other something', moment().add(1, 'hours')));
 
 		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeFalsy();
@@ -72,12 +76,15 @@ describe('items list', () => {
 
 	test(`when adding an 8th item, it should send an email notification`, () => {
 		let itemlist: ItemList = new ItemList();
+		const notifyMock = jest.fn().mockReturnValue(true);
+		itemlist['emailService'] = { notify: notifyMock };
+
 		for (let i = 1; i <= 7; i++) {
 			itemlist.addItem(new Item('coucou' + i, 'other something', moment().add(i, 'hours')));
 		}
-        itemlist.emailSenderService.notify = jest.fn().mockReturnValue(true) ;
 
 		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeTruthy();
-		expect(itemlist.emailSenderService.notify).toBeCalled();
+		expect(notifyMock).toBeCalledTimes(1);
+		expect(notifyMock).toReturnWith(true);
 	});
 });

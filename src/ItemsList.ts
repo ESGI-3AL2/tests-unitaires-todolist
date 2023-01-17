@@ -19,30 +19,29 @@ export default class ItemList {
 			return new RangeError("can't add item 30 min are required between tow adds");
 		}
 
-       for (let i = 0 ; i < this.listArray.length ; i++)
-       {
-        if (this.listArray[i].getItemName() === item.getItemName()) return false;
-       }
+		for (let i = 0; i < this.listArray.length; i++) {
+			if (this.listArray[i].getItemName() === item.getItemName()) return false;
+		}
 		this.listArray = [...this.listArray, item];
 
 		if (this.checkListSize() === 8) {
 			this.emailService.notify();
 		}
 
-		return true
+		return true;
 	}
 
 	checkListSize(): number {
 		return this.listArray.length;
 	}
 
-	checkAddInterval(item : Item): boolean {
-        const lastElemet = this.listArray[this.listArray.length - 1 ] ;
-        if (lastElemet !== undefined) {
-            if (moment(item.getDate()).diff(moment(lastElemet.getDate()) , "millisecond") <= 1800000) {
-                return false;
-            }
-        }
-        return true ;
+	checkAddInterval(item: Item): boolean {
+		const lastElemet = this.listArray[this.listArray.length - 1];
+		if (lastElemet !== undefined) {
+			if (moment(item.getDate()).diff(moment(lastElemet.getDate()), 'millisecond') <= 1800000) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

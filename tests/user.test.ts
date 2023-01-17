@@ -142,7 +142,7 @@ describe('user', () => {
 			}
 		} catch (err) {
 			expect(addTodo).toThrow("max size : can't add new item due to max size");
-			expect(isTodoAdded).toBeFalsy()
+			expect(isTodoAdded).toBeFalsy();
 			expect((err as Error).message).toEqual("max size : can't add new item due to max size");
 			expect(todos.checkListSize()).toEqual(10);
 		}

@@ -1,5 +1,3 @@
 export default class EmailSenderService {
-	notify(): void {
-
-	}
+	notify(): void {}
 }

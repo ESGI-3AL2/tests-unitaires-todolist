@@ -3,7 +3,6 @@ import moment from 'moment';
 import { expect, test, jest, describe } from '@jest/globals';
 import Item from '../src/Item';
 import ItemList from '../src/ItemsList';
-import EmailSenderService from '../src/EmailSenderService';
 
 describe('items list', () => {
 	test(`add 1 item should make the itemlist's size to 1`, () => {

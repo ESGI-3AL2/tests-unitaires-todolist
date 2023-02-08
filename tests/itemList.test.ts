@@ -84,6 +84,6 @@ describe('items list', () => {
 
 		expect(itemlist.addItem(new Item('coucou', 'other something', moment().add(25, 'hours')))).toBeTruthy();
 		expect(notifyMock).toBeCalledTimes(1);
-		expect(notifyMock).toReturnWith(false);
+		expect(notifyMock).toReturnWith(true);
 	});
 });
